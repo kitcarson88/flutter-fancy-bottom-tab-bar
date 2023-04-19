@@ -154,12 +154,12 @@ class _FancyBottomTabBarState extends State<FancyBottomTabBar> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    double? positionValue;
+    double? currentPosition;
     if (_positionAnimation?.value != null) {
       if (context.isRtl()) {
-        positionValue = 1 - _positionAnimation!.value;
+        currentPosition = 1 - _positionAnimation!.value;
       } else {
-        positionValue = _positionAnimation!.value;
+        currentPosition = _positionAnimation!.value;
       }
     }
 
@@ -207,8 +207,12 @@ class _FancyBottomTabBarState extends State<FancyBottomTabBar> with TickerProvid
                           _updateIndexTabData(i);
                           var nextColor = _currentCursorColor(context);
 
-                          _initAnimationAndStart(positionValue ?? 0, _convertToZeroRadialValue(i),
-                              currentColor, nextColor);
+                          final positionTo = context.isRtl()
+                              ? 1 - _convertToZeroRadialValue(i)
+                              : _convertToZeroRadialValue(i);
+
+                          _initAnimationAndStart(
+                              currentPosition ?? 0, positionTo, currentColor, nextColor);
 
                           if (widget.onItemTap != null) {
                             widget.onItemTap!(i);
@@ -226,7 +230,7 @@ class _FancyBottomTabBarState extends State<FancyBottomTabBar> with TickerProvid
           IgnorePointer(
             child: Align(
               heightFactor: (widget.cursorLedge / widget.cursorSize) * 2,
-              alignment: Alignment(positionValue ?? -1, 1),
+              alignment: Alignment(currentPosition ?? -1, 1),
               child: FractionallySizedBox(
                 widthFactor: 1 / widget.icons.length,
                 child: Stack(

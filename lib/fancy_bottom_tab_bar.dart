@@ -152,135 +152,132 @@ class _FancyBottomTabBarState extends State<FancyBottomTabBar> with TickerProvid
     }
   }
 
+  // double? currentPosition;
+  // if (_positionAnimation?.value != null) {
+  //   if (context.isRtl()) {
+  //     currentPosition = 1 - _positionAnimation!.value;
+  //   } else {
+  //     currentPosition = _positionAnimation!.value;
+  //   }
+  // }
   @override
-  Widget build(BuildContext context) {
-    double? currentPosition;
-    if (_positionAnimation?.value != null) {
-      if (context.isRtl()) {
-        currentPosition = 1 - _positionAnimation!.value;
-      } else {
-        currentPosition = _positionAnimation!.value;
-      }
-    }
-
-    return Container(
-      color: context.isDarkMode() ? widget.darkBackgroundColor : widget.backgroundColor,
-      decoration: widget.backgroundColor == null &&
-              (widget.backgroundGradient != null ||
-                  widget.borderRadius != null ||
-                  widget.boxShadows != null)
-          ? BoxDecoration(
-              gradient: context.isDarkMode() && widget.darkBackgroundGradient != null
-                  ? widget.darkBackgroundGradient
-                  : widget.backgroundGradient,
-              borderRadius: widget.borderRadius,
-              boxShadow: widget.boxShadows,
-            )
-          : null,
-      child: Stack(
-        alignment: Alignment.topCenter,
-        clipBehavior: Clip.none,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(bottom: _bottomPadding(context)),
-            child: SizedBox(
-              height: widget.height,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  for (var i = 0; i < widget.icons.length; ++i)
-                    Expanded(
-                      child: FancyBottomTabBarItem(
-                        icon: context.isDarkMode() &&
-                                widget.darkIcons != null &&
-                                widget.darkIcons!.length > i
-                            ? widget.darkIcons![i]
-                            : widget.icons[i],
-                        label: context.isDarkMode() &&
-                                widget.darkLabels != null &&
-                                widget.darkLabels!.length > i
-                            ? widget.darkLabels![i]
-                            : widget.labels?[i],
-                        selected: _currentSelectedIndex == i,
-                        onTap: () {
-                          var currentColor = _currentCursorColor(context);
-                          _updateIndexTabData(i);
-                          var nextColor = _currentCursorColor(context);
-
-                          final positionTo = context.isRtl()
-                              ? 1 - _convertToZeroRadialValue(i)
-                              : _convertToZeroRadialValue(i);
-
-                          _initAnimationAndStart(
-                              currentPosition ?? 0, positionTo, currentColor, nextColor);
-
-                          if (widget.onItemTap != null) {
-                            widget.onItemTap!(i);
-                          }
-                        },
-                        width: MediaQuery.of(context).size.width / widget.icons.length,
-                        topPadding: widget.topPadding,
-                        animationDurationMilliseconds: widget.animationMilliseconds,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
-          IgnorePointer(
-            child: Align(
-              heightFactor: (widget.cursorLedge / widget.cursorSize) * 2,
-              alignment: Alignment(currentPosition ?? -1, 1),
-              child: FractionallySizedBox(
-                widthFactor: 1 / widget.icons.length,
-                child: Stack(
-                  alignment: Alignment.topCenter,
-                  clipBehavior: Clip.none,
+  Widget build(BuildContext context) => Container(
+        color: context.isDarkMode() ? widget.darkBackgroundColor : widget.backgroundColor,
+        decoration: widget.backgroundColor == null &&
+                (widget.backgroundGradient != null ||
+                    widget.borderRadius != null ||
+                    widget.boxShadows != null)
+            ? BoxDecoration(
+                gradient: context.isDarkMode() && widget.darkBackgroundGradient != null
+                    ? widget.darkBackgroundGradient
+                    : widget.backgroundGradient,
+                borderRadius: widget.borderRadius,
+                boxShadow: widget.boxShadows,
+              )
+            : null,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          clipBehavior: Clip.none,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: _bottomPadding(context)),
+              child: SizedBox(
+                height: widget.height,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    if (widget.wavePositioningOverride != null)
-                      context.isDarkMode() && widget.darkWavePositioningOverride != null
-                          ? widget.darkWavePositioningOverride!
-                          : widget.wavePositioningOverride!,
-                    if (widget.wavePositioningOverride == null && widget.wave != null)
-                      Positioned(
-                        top: -widget.wavePositioning,
-                        child: context.isDarkMode() && widget.darkWave != null
-                            ? widget.darkWave!
-                            : widget.wave!,
-                      ),
-                    SizedBox(
-                      width: widget.cursorSize,
-                      height: widget.cursorSize,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentCursorColor(context),
+                    for (var i = 0; i < widget.icons.length; ++i)
+                      Expanded(
+                        child: FancyBottomTabBarItem(
+                          icon: context.isDarkMode() &&
+                                  widget.darkIcons != null &&
+                                  widget.darkIcons!.length > i
+                              ? widget.darkIcons![i]
+                              : widget.icons[i],
+                          label: context.isDarkMode() &&
+                                  widget.darkLabels != null &&
+                                  widget.darkLabels!.length > i
+                              ? widget.darkLabels![i]
+                              : widget.labels?[i],
+                          selected: _currentSelectedIndex == i,
+                          onTap: () {
+                            var currentColor = _currentCursorColor(context);
+                            _updateIndexTabData(i);
+                            var nextColor = _currentCursorColor(context);
+
+                            final positionTo = context.isRtl()
+                                ? -_convertToZeroRadialValue(i)
+                                : _convertToZeroRadialValue(i);
+
+                            _initAnimationAndStart(_positionAnimation?.value ?? 0, positionTo,
+                                currentColor, nextColor);
+
+                            if (widget.onItemTap != null) {
+                              widget.onItemTap!(i);
+                            }
+                          },
+                          width: MediaQuery.of(context).size.width / widget.icons.length,
+                          topPadding: widget.topPadding,
+                          animationDurationMilliseconds: widget.animationMilliseconds,
                         ),
-                        child: Center(
-                          child: Stack(
-                            children: [
-                              Opacity(
-                                opacity: _cursorIconAlpha,
-                                child: _activeIcon,
-                              ),
-                              Opacity(
-                                opacity: 1 - _cursorIconAlpha,
-                                child: _nextIcon,
-                              ),
-                            ],
-                          ),
-                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            IgnorePointer(
+              child: Align(
+                heightFactor: (widget.cursorLedge / widget.cursorSize) * 2,
+                alignment: Alignment(_positionAnimation?.value ?? -1, 1),
+                child: FractionallySizedBox(
+                  widthFactor: 1 / widget.icons.length,
+                  child: Stack(
+                    alignment: Alignment.topCenter,
+                    clipBehavior: Clip.none,
+                    children: [
+                      if (widget.wavePositioningOverride != null)
+                        context.isDarkMode() && widget.darkWavePositioningOverride != null
+                            ? widget.darkWavePositioningOverride!
+                            : widget.wavePositioningOverride!,
+                      if (widget.wavePositioningOverride == null && widget.wave != null)
+                        Positioned(
+                          top: -widget.wavePositioning,
+                          child: context.isDarkMode() && widget.darkWave != null
+                              ? widget.darkWave!
+                              : widget.wave!,
+                        ),
+                      SizedBox(
+                        width: widget.cursorSize,
+                        height: widget.cursorSize,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _currentCursorColor(context),
+                          ),
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                Opacity(
+                                  opacity: _cursorIconAlpha,
+                                  child: _activeIcon,
+                                ),
+                                Opacity(
+                                  opacity: 1 - _cursorIconAlpha,
+                                  child: _nextIcon,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 
   void _updateIndexTabData(int index) {
     setState(() {

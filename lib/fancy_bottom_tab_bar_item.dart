@@ -1,24 +1,22 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class FancyBottomTabBarItem extends StatefulWidget {
   final Widget icon;
   final Widget? label;
   final bool selected;
   final Function()? onTap;
-  final double width;
   final double topPadding;
   final int animationDurationMilliseconds;
 
   const FancyBottomTabBarItem({
-    Key? key,
+    super.key,
     required this.icon,
     this.label,
     required this.selected,
     this.onTap,
-    required this.width,
     required this.topPadding,
     required this.animationDurationMilliseconds,
-  }) : super(key: key);
+  });
 
   @override
   State<FancyBottomTabBarItem> createState() => _FancyBottomTabBarItemState();
@@ -44,7 +42,7 @@ class _FancyBottomTabBarItemState extends State<FancyBottomTabBarItem> {
 
   void setSelected(bool selected) {
     setState(() {
-      _iconYPosition = widget.selected ? -widget.topPadding : 0;
+      _iconYPosition = !widget.selected || widget.label == null ? 0 : -widget.topPadding;
       _iconOpacity = widget.selected ? 0 : 1;
     });
   }
@@ -54,7 +52,7 @@ class _FancyBottomTabBarItemState extends State<FancyBottomTabBarItem> {
         behavior: HitTestBehavior.translucent,
         onTap: widget.onTap,
         child: Padding(
-          padding: EdgeInsets.only(top: widget.topPadding),
+          padding: widget.label != null ? EdgeInsets.only(top: widget.topPadding) : EdgeInsets.zero,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

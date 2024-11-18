@@ -1,10 +1,9 @@
 name: fancy_bottom_tab_bar
 description: A high customizable flutter mottom tab bar.
-version: 2.0.0
-homepage:
+version: 2.0.1
 
 environment:
-  sdk: ^3.5.3
+  sdk: ^2.17.3
   flutter: ">=1.17.0"
 
 dependencies:

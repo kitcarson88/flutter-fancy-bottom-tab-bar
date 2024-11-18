@@ -46,8 +46,9 @@ class FancyBottomTabBar extends StatefulWidget {
   final Widget? darkWavePositioningOverride;
   final int animationMilliseconds;
 
+  // ignore: use_super_parameters
   const FancyBottomTabBar({
-    super.key,
+    Key? key,
     required this.initialSelectedIndex,
     required this.onItemTap,
     this.controller,
@@ -88,7 +89,8 @@ class FancyBottomTabBar extends StatefulWidget {
     this.darkWavePositioningOverride,
     this.animationMilliseconds = 100,
   })  : assert(cursorLedge <= cursorSize),
-        assert(wavePositioning >= 0);
+        assert(wavePositioning >= 0),
+        super(key: key);
 
   @override
   State<FancyBottomTabBar> createState() => _FancyBottomTabBarState();

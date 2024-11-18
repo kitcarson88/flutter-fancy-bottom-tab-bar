@@ -8,15 +8,16 @@ class FancyBottomTabBarItem extends StatefulWidget {
   final double topPadding;
   final int animationDurationMilliseconds;
 
+  // ignore: use_super_parameters
   const FancyBottomTabBarItem({
-    super.key,
+    Key? key,
     required this.icon,
     this.label,
     required this.selected,
     this.onTap,
     required this.topPadding,
     required this.animationDurationMilliseconds,
-  });
+  }) : super(key: key);
 
   @override
   State<FancyBottomTabBarItem> createState() => _FancyBottomTabBarItemState();

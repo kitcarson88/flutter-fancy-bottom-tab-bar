@@ -5,11 +5,9 @@ class FancyBottomTabBarController extends ValueNotifier<bool> {
 
   void expand() {
     value = true;
-    notifyListeners();
   }
 
   void shrink() {
     value = false;
-    notifyListeners();
   }
 }

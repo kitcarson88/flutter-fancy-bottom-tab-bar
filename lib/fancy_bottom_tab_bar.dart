@@ -28,6 +28,7 @@ class FancyBottomTabBar extends StatefulWidget {
   final Gradient? darkBackgroundGradient;
   final List<BoxShadow>? boxShadows;
   final BorderRadiusGeometry? borderRadius;
+  final BorderRadiusGeometry? collapsedBorderRadius;
   final double cursorSize;
   final double cursorLedge;
   final double collapsedCursorLedge;
@@ -61,6 +62,7 @@ class FancyBottomTabBar extends StatefulWidget {
     this.darkBackgroundGradient,
     this.boxShadows,
     this.borderRadius,
+    this.collapsedBorderRadius,
     required this.icons,
     this.activeIcons,
     this.darkIcons,
@@ -215,7 +217,9 @@ class _FancyBottomTabBarState extends State<FancyBottomTabBar> with TickerProvid
             gradient: context.isDarkMode() && widget.darkBackgroundGradient != null
                 ? widget.darkBackgroundGradient
                 : widget.backgroundGradient,
-            borderRadius: widget.borderRadius,
+            borderRadius: !_expanded && widget.collapsedBorderRadius != null
+                ? widget.collapsedBorderRadius
+                : widget.borderRadius,
             boxShadow: widget.boxShadows,
           )
         : null;
@@ -273,8 +277,16 @@ class _FancyBottomTabBarState extends State<FancyBottomTabBar> with TickerProvid
                     icon: context.isDarkMode() &&
                             widget.darkIcons != null &&
                             widget.darkIcons!.length > i
-                        ? widget.darkIcons![i]
-                        : widget.icons[i],
+                        ? (!_expanded &&
+                                widget.collapsedDarkIcons != null &&
+                                widget.collapsedDarkIcons!.length > i
+                            ? widget.collapsedDarkIcons![i]
+                            : widget.darkIcons![i])
+                        : (!_expanded &&
+                                widget.collapsedIcons != null &&
+                                widget.collapsedIcons!.length > i
+                            ? widget.collapsedIcons![i]
+                            : widget.icons[i]),
                     label: _expanded
                         ? (context.isDarkMode() &&
                                 widget.darkLabels != null &&
